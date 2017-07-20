@@ -12,3 +12,7 @@ Version 0.1.1
 ---------------
 - Add Taiga project to setting, this allows it to be user dynamic
 
+Version 0.1.2
+---------------
+- Fix the task body if its not formatted
+

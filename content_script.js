@@ -95,7 +95,7 @@ const doStuff = function (task) {
             mytask.description = mytask.body.split(seperator)[1]
             mytask.description = mytask.description.split("\n").map(x => x.trim()).join("\n").trim()
         } else {
-            mytask.description = body
+            mytask.description = mytask.body;
         }
         json_task = JSON.stringify(mytask);
         var token = JSON.parse(window.localStorage.getItem("token"));

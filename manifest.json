@@ -1,0 +1,25 @@
+{
+   "background": {
+      "scripts": [ "background.js" ]
+   },
+   "content_scripts": [ {
+      "css": [ "css/promotify_stylesheet.css" ],
+      "js": [ "lib/jquery.min.js", "lib/jquery-ui-1.10.3.custom.min.js", "content_script.js" ],
+      "matches": [ "https://crm.mayden.co.uk/tasks/*" ]
+   } ],
+   "description": "Orbit to taiga takes a pre-formatted Taiga issue and creates a new user story.",
+   "icons": {
+      "128": "img/promotify_128.png",
+      "20": "img/promotify_20.png"
+   },
+   "manifest_version": 2,
+   "name": "Orbit-to-taiga",
+   "page_action": {
+      "default_icon": "img/promotify_20.png",
+      "default_title": "Orbit detected"
+   },
+   "permissions": [ "tabs", "https://crm.mayden.co.uk/project/*", "declarativeContent", "storage", "webNavigation" ],
+   "version": "0.1.0",
+   "options_page": "options.html",
+   "web_accessible_resources": [ "*.css" ]
+}

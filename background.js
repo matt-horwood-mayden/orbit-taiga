@@ -10,30 +10,36 @@ var taigaApp = {
     taigaURL: "",
     tusername: "",
     tpassword: "",
+    project: "",
     populateStorage: function () {
         localStorage.setItem('taigaURL', '');
         localStorage.setItem('username', '');
         localStorage.setItem('password', '');
+        localStorage.setItem('project', '');
         this.loadCredentials();
     },
     loadCredentials: function () {
         this.taigaURL = localStorage.getItem('taigaURL');
         this.tusername = localStorage.getItem('username');
         this.tpassword = localStorage.getItem('password');
-        var auth_req = new XMLHttpRequest();
-        auth_req.open("POST", this.taigaURL + "/api/v1/auth", false);
-        auth_req.setRequestHeader('Content-Type', 'application/json');
-        //auth_req.setRequestHeader('Authorization', 'Bearer ' + auth_token);
-        var request_data = JSON.stringify({"password": this.tpassword, "type": "normal", "username": this.tusername});
-        auth_req.send(request_data);
-        auth_token = JSON.parse(auth_req.responseText);
-        localStorage.setItem('token', auth_token.auth_token);
-        this.auth_token = auth_token.auth_token;
+        this.tproject = localStorage.getItem('project');
+        if(this.taigaURL != ""){
+            var auth_req = new XMLHttpRequest();
+            auth_req.open("POST", this.taigaURL + "/api/v1/auth", false);
+            auth_req.setRequestHeader('Content-Type', 'application/json');
+            //auth_req.setRequestHeader('Authorization', 'Bearer ' + auth_token);
+            var request_data = JSON.stringify({"password": this.tpassword, "type": "normal", "username": this.tusername});
+            auth_req.send(request_data);
+            auth_token = JSON.parse(auth_req.responseText);
+            localStorage.setItem('token', auth_token.auth_token);
+            this.auth_token = auth_token.auth_token;
+        }
     },
     saveCredentials: function () {
         localStorage.setItem('taigaURL', this.taigaURL);
         localStorage.setItem('username', this.tusername);
         localStorage.setItem('password', this.tpassword);
+        localStorage.setItem('project', this.tproject);
     }
 }
 
@@ -305,7 +311,7 @@ function extract_information_from_current_url(task) {
 
     ThisTask = JSON.parse(task)
     //var issue_num = get_issue_number(CURRENT_TAB_URL);
-    var proj_slug = get_proj_slug("https://taiga.horwood.biz/project/matt-home-it/");
+    var proj_slug = get_proj_slug(taigaApp.taigaURL + "/project/"+taigaApp.tproject+"/");
     var get_response_id = make_http_request("GET", api_url + "/projects/by_slug?slug=" + proj_slug, null, true, false, token);
     var proj_id = get_project_id(get_response_id);
 

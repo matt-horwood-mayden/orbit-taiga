@@ -16,3 +16,9 @@ Version 0.1.2
 ---------------
 - Fix the task body if its not formatted
 
+Version 0.1.3
+---------------
+- move taiga token request to options page JS, removed taiga token request from backgroud.js
+- add orbit ID to functions to allow setting a custom field
+- deleted unused files
+

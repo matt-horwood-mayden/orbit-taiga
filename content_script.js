@@ -2,7 +2,7 @@
  * author: Jared McReynolds
  */
 
- const seperator = '----------------------'
+const seperator = '----------------------'
 
 /**
  * find out what the browser is
@@ -35,7 +35,7 @@ const allTasks = new Set()
 *
 */
 function get_token(){
-    var token = JSON.parse(window.localStorage.getItem("token"));
+    var token = localStorage.getItem("token");
 
     var script = document.createElement("script");
     script.setAttribute("type", "application/javascript");
@@ -129,7 +129,3 @@ function requestHandler(request, sender, sendResponse) {
 }
 
 chrome_browser.extension.onMessage.addListener(requestHandler);
-//insert_button();
-
-
-

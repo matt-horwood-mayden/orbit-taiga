@@ -11,6 +11,7 @@ var taigaApp = {
     tusername: "",
     tpassword: "",
     project: "",
+    auth_token: "",
     populateStorage: function () {
         localStorage.setItem('taigaURL', '');
         localStorage.setItem('username', '');
@@ -23,17 +24,7 @@ var taigaApp = {
         this.tusername = localStorage.getItem('username');
         this.tpassword = localStorage.getItem('password');
         this.tproject = localStorage.getItem('project');
-        if(this.taigaURL != ""){
-            var auth_req = new XMLHttpRequest();
-            auth_req.open("POST", this.taigaURL + "/api/v1/auth", false);
-            auth_req.setRequestHeader('Content-Type', 'application/json');
-            //auth_req.setRequestHeader('Authorization', 'Bearer ' + auth_token);
-            var request_data = JSON.stringify({"password": this.tpassword, "type": "normal", "username": this.tusername});
-            auth_req.send(request_data);
-            auth_token = JSON.parse(auth_req.responseText);
-            localStorage.setItem('token', auth_token.auth_token);
-            this.auth_token = auth_token.auth_token;
-        }
+        this.auth_token = localStorage.getItem('token');
     },
     saveCredentials: function () {
         localStorage.setItem('taigaURL', this.taigaURL);
@@ -245,10 +236,11 @@ function get_issue_subject(http_req){
  * @param {string} issue_description The description of the issue that will be transferred to the user story
  *
  * */
-function promote_issue(full_url, project_id, subject, issue_description, auth_token){
+function promote_issue(full_url, project_id, subject, issue_description, auth_token,orbit_id){
     var request_data = JSON.stringify({"project": project_id,
                         "subject": subject,
-                        "description": issue_description});
+                        "description": issue_description,
+                        "orbit-id": orbit_id});
 
     var response = make_http_request("POST", full_url, request_data, true, false, auth_token);
     var http_response_text = JSON.parse(response.responseText);
@@ -318,7 +310,7 @@ function extract_information_from_current_url(task) {
     var issue_description = "Task# [" + ThisTask['taskId'] + "](https://crm.mayden.co.uk/tasks/"+ ThisTask['taskId'] +"/)\n\n" + ThisTask['body'];
     var issue_subject = ThisTask['title'];
 
-    return { 'proj_id': proj_id, 'issue_subject': issue_subject, 'issue_description': issue_description };
+    return { 'proj_id': proj_id, 'issue_subject': issue_subject, 'issue_description': issue_description, 'orbit_id': ThisTask['taskId'] };
 }
 
 
@@ -330,7 +322,8 @@ function main(task){
                                   extracted_information['proj_id'],
                                   extracted_information['issue_subject'],
                                   extracted_information['issue_description'],
-                                  token);
+                                  token,
+                                  extracted_information['orbit_id']);
 
     //add_tasks(extracted_information['issue_description'], extracted_information['proj_id'], new_us_id, token);
 

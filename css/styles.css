@@ -256,3 +256,4 @@ fieldset.warning legend + p,fieldset.update legend + p{margin-top:12px}
 #nav li:hover ul a{text-decoration:none}
 #nav li:hover ul li a:hover{background:#333}
 #content-search{position:absolute;height:26px;width:100%;overflow:hidden;top:52px;-moz-box-sizing:border-box;box-sizing:border-box;}
+.errors{background:#fed7d7;border:1px solid red;list-style-indent:inside;margin:0 0 2em;padding:1em}

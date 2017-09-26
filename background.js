@@ -321,12 +321,12 @@ function main(task){
     if(extracted_information['isAdded'] === 1){
       alert('We have this story!');
     }else{
-    /*var new_us_id = promote_issue(user_stories_url,
+    var new_us_id = promote_issue(user_stories_url,
                                   extracted_information['proj_id'],
                                   extracted_information['issue_subject'],
                                   extracted_information['issue_description'],
                                   token,
-                                  extracted_information['orbit_id']);*/
+                                  extracted_information['orbit_id']);
 
     //add_tasks(extracted_information['issue_description'], extracted_information['proj_id'], new_us_id, token);
 

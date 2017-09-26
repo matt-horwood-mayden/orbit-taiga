@@ -1,4 +1,4 @@
-/* Promotify Chrome Extension 
+/* Promotify Chrome Extension
  * author: Jared McReynolds
  */
 
@@ -93,9 +93,9 @@ chrome_browser.extension.onMessage.addListener(function(request, sender, sendRes
 function checkForValidUrl(tab) {
     if ((tab.url.indexOf('https://beta-crm.mayden.co.uk/tasks/')) == 0 || (tab.url.indexOf('https://crm.mayden.co.uk/tasks/') == 0)) {
         chrome_browser.pageAction.show(tab.id);
-        
+
         //console.log(tab.url);
-        
+
         // Call content-script initialize function
         chrome_browser.tabs.sendMessage(
             //Selected tab id
@@ -107,7 +107,7 @@ function checkForValidUrl(tab) {
                 //console.log(response);
                 //update panel status
                 //app.tabs[tab.id].panel.visible = response.status;
-                //updateIconStatus(tab.id) 
+                //updateIconStatus(tab.id)
             }
         );
     }
@@ -139,7 +139,7 @@ chrome.runtime.onMessage.addListener(
     }
 });
 
-/* Processes the passed in url_string to get the current issue 
+/* Processes the passed in url_string to get the current issue
 * number.
 */
 function get_issue_number(url_string){
@@ -167,7 +167,7 @@ function make_http_request(method, url, data, bearerHeader, async, auth_token){
         req.setRequestHeader('Authorization', 'Bearer ' + auth_token);
     }
     req.send(data);
-    
+
     if(req.status == 401){
         alert('All of the broken!');
     }
@@ -187,7 +187,7 @@ function get_proj_slug(url_string){
        proj_slug = path_array[i+ 1];
        }
     }
-    
+
     return proj_slug;
 }
 
@@ -296,7 +296,7 @@ function add_tasks(description, project_id, user_story_id, auth_token){
     }
 }
 
-/* Extracts all the information need to make the new user story 
+/* Extracts all the information need to make the new user story
 * from all the respective places.
 */
 function extract_information_from_current_url(task) {
@@ -307,25 +307,42 @@ function extract_information_from_current_url(task) {
     var get_response_id = make_http_request("GET", api_url + "/projects/by_slug?slug=" + proj_slug, null, true, false, token);
     var proj_id = get_project_id(get_response_id);
 
+    var isAdded = get_story_list(proj_id, ThisTask['title']);
     var issue_description = "Task# [" + ThisTask['taskId'] + "](https://crm.mayden.co.uk/tasks/"+ ThisTask['taskId'] +"/)\n\n" + ThisTask['body'];
     var issue_subject = ThisTask['title'];
 
-    return { 'proj_id': proj_id, 'issue_subject': issue_subject, 'issue_description': issue_description, 'orbit_id': ThisTask['taskId'] };
+    return { 'proj_id': proj_id, 'issue_subject': issue_subject, 'issue_description': issue_description, 'orbit_id': ThisTask['taskId'], 'isAdded': isAdded };
 }
 
 
 function main(task){
     var extracted_information = extract_information_from_current_url(task);
 
-    
-    var new_us_id = promote_issue(user_stories_url,
+    if(extracted_information['isAdded'] === 1){
+      alert('We have this story!');
+    }else{
+    /*var new_us_id = promote_issue(user_stories_url,
                                   extracted_information['proj_id'],
                                   extracted_information['issue_subject'],
                                   extracted_information['issue_description'],
                                   token,
-                                  extracted_information['orbit_id']);
+                                  extracted_information['orbit_id']);*/
 
     //add_tasks(extracted_information['issue_description'], extracted_information['proj_id'], new_us_id, token);
 
-    alert("User Story Complete");
+    alert("User story now no in taiga");
+  }
+}
+
+function get_story_list(proj_id, story_title){
+    var story_list = make_http_request("GET", api_url + "/search?project=" + proj_id+"&text="+story_title, null, true, false, token);
+    var list = JSON.parse(story_list.responseText);
+    var isAdded = 0;
+    list.userstories.forEach(function(element) {
+      if(element.subject == story_title){
+        //alert('we have a match');
+        isAdded = 1;
+      }
+    });
+    return isAdded;
 }

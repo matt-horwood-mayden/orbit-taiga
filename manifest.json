@@ -19,7 +19,7 @@
       "default_title": "Orbit detected"
    },
    "permissions": [ "tabs", "https://crm.mayden.co.uk/project/*", "declarativeContent", "storage", "webNavigation" ],
-   "version": "0.1.3",
+   "version": "0.1.4",
    "options_page": "options.html",
    "web_accessible_resources": [ "*.css" ]
 }

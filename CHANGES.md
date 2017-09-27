@@ -22,3 +22,6 @@ Version 0.1.3
 - add orbit ID to functions to allow setting a custom field
 - deleted unused files
 
+Version 0.1.4
+---------------
+- added orbit task title search
